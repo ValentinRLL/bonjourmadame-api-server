@@ -1,4 +1,4 @@
-FROM jazzdd/alpine-flash:python3
+FROM jazzdd/alpine-flask:python3
 
 LABEL name="BonjourMadame API Server" \
       maintainer="Djerfy <djerfy@gmail.com>" \
