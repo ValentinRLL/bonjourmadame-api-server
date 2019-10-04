@@ -11,17 +11,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Build
-      run: |
-        docker build -t djerfy/bonjourmadame-api-server:${GITHUB_SHA} .
-        docker build -t djerfy/bonjourmadame-api-server:latest .
+      uses: actions/docker/cli@master
+      with:
+        args: build -t djerfy/bonjourmadame-api-server:latest .
     - name: Login
       uses: actions/docker/login@master
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
     - name: Push
-      run: |
-        docker push djerfy/bonjourmadame-api-server:${GITHUB_SHA}
-        docker push djerfy/bonjourmadame-api-server:latest
-    - name: Logout
-      run: docker logout
+      uses: actions/docker/cli@master
+      with:
+        args: push djerfy/bonjourmadame-api-server:latest
