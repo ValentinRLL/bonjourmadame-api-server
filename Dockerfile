@@ -8,7 +8,7 @@ LABEL name="BonjourMadame API Server" \
 ADD src /app
 
 RUN set -xe && \
-    chmod +x /app/server.py
+    chmod +x /app/*.py
 
 HEALTHCHECK --interval=30s \
     --timeout=10s \
