@@ -14,8 +14,11 @@ jobs:
       run: |
         docker build -t djerfy/bonjourmadame-api-server:${GITHUB_SHA} .
         docker build -t djerfy/bonjourmadame-api-server:latest .
-    - name: Login 
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login
+      uses: actions/docker/login@master
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
     - name: Push
       run: |
         docker push djerfy/bonjourmadame-api-server:${GITHUB_SHA}
