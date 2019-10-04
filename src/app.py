@@ -37,7 +37,7 @@ def getURL(url):
     retries_now = 0
     while picture_url == "" and retries_now <= retries_max:
         content = urllib.request.urlopen(url)
-        filtered = re.search(r'<img class="alignnone .+" src="(.+)\?resize=800.+" alt .+', str(content.read()))
+        filtered = re.search(r'<img class="alignnone .+" src="(.+)\?resize=.+" alt .+ data-lazy-srcset="', str(content.read()))
         if not filtered:
             retries_now = retries_now + 1
             continue
