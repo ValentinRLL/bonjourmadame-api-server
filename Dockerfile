@@ -8,7 +8,8 @@ LABEL name="BonjourMadame API Server" \
 ADD src /app
 
 RUN set -xe && \
-    chmod +x /app/*.py
+    chmod +x /app/*.py && \
+    sed -i "s/uwsgi --ini/uwsgi --disable-logging --ini/g" /entrypoint.sh
 
 HEALTHCHECK --interval=30s \
     --timeout=10s \
