@@ -1,0 +1,25 @@
+sudo: required
+
+language: minimal
+
+services:
+  - docker
+
+script:
+  # tests
+  - bash .travis/test.sh
+
+deploy:
+  # nightly
+  - provider: script
+    skip_cleanup: true
+    script: bash .travis/deploy.sh nightly
+    on:
+      branch: master
+  # latest
+  - provider: script
+    skip_cleanup: true
+    script: bash .travis/deploy.sh latest
+    on:
+      tags: true
+      all_branches: true
