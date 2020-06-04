@@ -14,8 +14,8 @@ else
     docker build -t local/${IMAGE_NAME}:${TRAVIS_COMMIT}
 fi
 
-docker container run -d --name ${IMAGE_NAME} -p 8080:8080 ${DOCKER_USERNAME:-local}/${IMAGE_NAME}:${TRAVIS_COMMIT}
+docker container run -d --name ${IMAGE_NAME} -p 5000:5000 ${DOCKER_USERNAME:-local}/${IMAGE_NAME}:${TRAVIS_COMMIT}
 sleep 10
 docker ps | grep ${IMAGE_NAME} && echo "Container running successfully"
-curl -sL http://127.0.0.1:8080/ | egrep "Return a latest url picture for bonjourmadame" && echo "BonjourMadame API Server running successfully"
+curl -sL http://127.0.0.1:5000/ | egrep "Return a latest url picture for bonjourmadame" && echo "BonjourMadame API Server running successfully"
 docker logs ${IMAGE_NAME}

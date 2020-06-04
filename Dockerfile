@@ -1,19 +1,17 @@
-FROM jazzdd/alpine-flask:python3
+FROM ubuntu:20.04
 
 LABEL name="BonjourMadame API Server" \
       maintainer="Djerfy <djerfy@gmail.com>" \
       repository="https://github.com/djerfy/bonjourmadame-api-server.git" \
-      version="1.6.0"
+      version="1.9.0"
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y python3 python3-pip && \
+    pip3 install flask requests
 
 ADD src /app
 
-RUN set -xe && \
-    chmod +x /app/*.py && \
-    sed -i "s/uwsgi --ini/uwsgi --disable-logging --ini/g" /entrypoint.sh
-
-HEALTHCHECK --interval=30s \
-    --timeout=10s \
-    --start-period=30s \
-    --retries=3 \
-    CMD pgrep -f "uwsgi" || exit 1
-
+RUN chmod +x /app/bm-api-server.py
+    
+ENTRYPOINT ["/usr/bin/python3", "/app/bm-api-server.py"]
