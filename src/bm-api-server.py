@@ -67,7 +67,7 @@ def version():
     """
     Return application version
     """
-    return jsonify(response = "1.9.0")
+    return jsonify(response = "1.9.1")
 
 @app.route('/api/latest')
 def latest():

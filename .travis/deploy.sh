@@ -30,7 +30,7 @@ case "${IMAGE_TAG}" in
     latest)
         [ -z "${TRAVIS_TAG}" ] && echo "Error variable TRAVIS_TAG is not defined" && exit 1
         # push image with tags 'nightly', tag version and 'latest'
-        for TARGET in nightly ${TRAVIS_TAG} latest; do
+        for TARGET in ${TRAVIS_TAG} latest; do
             do_tag ${TRAVIS_COMMIT} ${TARGET}
             do_push ${TARGET}
         done

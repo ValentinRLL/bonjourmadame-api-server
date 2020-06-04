@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 LABEL name="BonjourMadame API Server" \
       maintainer="Djerfy <djerfy@gmail.com>" \
       repository="https://github.com/djerfy/bonjourmadame-api-server.git" \
-      version="1.9.0"
+      version="1.9.1"
 
 RUN apt-get update && \
     apt-get upgrade -y && \
