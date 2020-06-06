@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from flask import Flask, abort, jsonify, request, render_template
 
 app = Flask(__name__.split('.')[0])
+ver = os.environ['VERSION']
 
 def randomDate(start, end):
     """
@@ -53,7 +54,7 @@ def index():
     """
     Return index page from HTML template
     """
-    return render_template('index.html')
+    return render_template('index.html', version=ver)
 
 @app.route('/api/ping')
 def ping():
@@ -67,7 +68,7 @@ def version():
     """
     Return application version
     """
-    return jsonify(response = "1.9.1")
+    return jsonify(response = ver)
 
 @app.route('/api/latest')
 def latest():
