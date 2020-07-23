@@ -4,7 +4,7 @@ LABEL name="BonjourMadame API Server" \
       maintainer="Djerfy <djerfy@gmail.com>" \
       repository="https://github.com/djerfy/bonjourmadame-api-server.git"
 
-ENV VERSION=1.9.3
+ENV VERSION=1.9.4
 
 RUN apt-get update && \
     apt-get upgrade -y && \
