@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, re, sys, calendar, requests, urllib.request
+import os, re, sys, calendar, requests
 from random import randrange
 from datetime import date, datetime, timedelta
 from flask import Flask, abort, jsonify, request, render_template
@@ -34,20 +34,25 @@ def getURL(url):
     Get content from website and return a picture URL
     """
     picture_url = ""
-    retries_max = 10
     retries_now = 0
-    while picture_url == "" and retries_now <= retries_max:
-        content = urllib.request.urlopen(url)
-        filtered = re.search(r'<img class="alignnone .+" src="(.+)\?resize=.+" alt .+ data-lazy-srcset="', str(content.read()))
+    retries_max = 10
+    if "RETRIES_MAX" in os.environ:
+        retries_max = os.environ['RETRIES_MAX']
+    while picture_url == "" and picture_url.split('/')[-1] != "noclub.png" and retries_now <= retries_max:
+        response = requests.get(url)
+        if response.status_code != 200:
+            retries_now = retries_now + 1
+            continue
+        filtered = re.search(r'<img class="alignnone .+" src="(.+)\?resize=.+" alt .+ data-lazy-srcset="', str(response.content))
         if not filtered:
             retries_now = retries_now + 1
             continue
         picture_url = filtered.group(1)
         break
-    if not picture_url or picture_url == "":
-        return None
+    if not picture_url or picture_url == "" or picture_url.split('/')[-1] == "noclub.png":
+        return None, retries_now
     else:
-        return picture_url
+        return picture_url, retries_now
 
 @app.route('/')
 def index():
@@ -77,11 +82,13 @@ def latest():
     """
     dtoday = date.today()
     dname = calendar.day_name[dtoday.weekday()]
+    url, retry = getURL("http://www.bonjourmadame.fr/")
     return jsonify(
         node = os.environ['HOSTNAME'],
         title = "BonjourMadame, {} {} (latest)".format(str(dname), str(dtoday.day)),
         description = "Return latest picture URL",
-        url = getURL("http://www.bonjourmadame.fr/"))
+        url = url,
+        retry = retry)
 
 @app.route('/api/random')
 def random():
@@ -91,11 +98,13 @@ def random():
     dtoday = date.today()
     dname = calendar.day_name[dtoday.weekday()]
     dateNow = datetime.strptime(datetime.now().strftime('%Y-%m-%d'), '%Y-%m-%d')
+    url, retry = getURL("http://www.bonjourmadame.fr/{}".format(randomURI(dateNow)))
     return jsonify(
         node = os.environ['HOSTNAME'],
         title = "BonjourMadame, {} {} (random)".format(str(dname), str(dtoday.day)),
         description = "Return random picture URL",
-        url = getURL("http://www.bonjourmadame.fr/{}".format(randomURI(dateNow))))
+        url = url,
+        retry = retry)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=False)
